@@ -31,7 +31,7 @@ pipeline {
                     echo "Deploying.."
                     def packageJSON = readJSON file: 'webapp/package.json'
                     def packageJSONVersion = packageJSON.version
-                    echo "${packageJSONVersion}
+                    echo "${packageJSONVersion}"
                     sh "curl -u admin:renuka -X GET \'http://35.154.11.1:8081/repository/lmsproject/dist-${packageJSONVersion}.zip\' --output dist-'${packageJSONVersion}'.zip"
                 
                     sh 'sudo rm -rf /var/www/html/*'
