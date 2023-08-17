@@ -4,7 +4,7 @@ pipeline {
         stage('Sonar Analysis') {
             steps {
                 echo 'Testing..'
-                sh 'cd webapp && sudo docker run  --rm -e SONAR_HOST_URL="http://35.154.11.1:9000" -e SONAR_LOGIN="sqp_4fd6a017cf134c931906debbb2970ba8747f2b03"  -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms-project'
+                sh 'cd webapp && sudo docker run  --rm -e SONAR_HOST_URL="http://35.154.75.206:9000" -e SONAR_LOGIN="sqp_7d94b177a5fc6764ffe9bf74c26ce180dcfb41b4"  -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms-project'
             }
         }
         stage('Build LMS') {
@@ -21,7 +21,7 @@ pipeline {
                     def packageJSONVersion = packageJSON.version
                     echo "${packageJSONVersion}"
                     sh "zip webapp/dist-${packageJSONVersion}.zip -r webapp/dist"
-                    sh "curl -v -u admin:renuka --upload-file webapp/dist-${packageJSONVersion}.zip http://35.154.11.1:8081/repository/lmsproject/"
+                    sh "curl -v -u admin:renuka --upload-file webapp/dist-${packageJSONVersion}.zip http://35.154.75.206:8081/repository/lmsproject/"
             }
             }
         }
@@ -32,7 +32,7 @@ pipeline {
                     def packageJSON = readJSON file: 'webapp/package.json'
                     def packageJSONVersion = packageJSON.version
                     echo "${packageJSONVersion}"
-                    sh "curl -u admin:renuka -X GET \'http://35.154.11.1:8081/repository/lmsproject/dist-${packageJSONVersion}.zip\' --output dist-'${packageJSONVersion}'.zip"
+                    sh "curl -u admin:renuka -X GET \'http://35.154.75.206:8081/repository/lmsproject/dist-${packageJSONVersion}.zip\' --output dist-'${packageJSONVersion}'.zip"
                 
                     sh 'sudo rm -rf /var/www/html/*'
                     sh "sudo unzip -o dist-'${packageJSONVersion}'.zip"
