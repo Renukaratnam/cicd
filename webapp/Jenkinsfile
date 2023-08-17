@@ -31,8 +31,7 @@ pipeline {
                     echo "Deploying.."
                     def packageJSON = readJSON file: 'webapp/package.json'
                     def packageJSONVersion = packageJSON.version
-                    echo "${packageJSONVersion}"
-                    sh "sudo apt install zip -y"
+                    echo "${packageJSONVersion}
                     sh "curl -u admin:gopal -X GET \'http://3.110.221.47:8081/repository/lms/dist-${packageJSONVersion}.zip\' --output dist-'${packageJSONVersion}'.zip"
                 
                     sh 'sudo rm -rf /var/www/html/*'
