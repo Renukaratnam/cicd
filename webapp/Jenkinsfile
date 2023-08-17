@@ -4,7 +4,7 @@ pipeline {
         stage('Sonar Analysis') {
             steps {
                 echo 'Testing..'
-                sh 'cd webapp && sudo docker run  --rm -e SONAR_HOST_URL="http://15.206.210.7:9000" -e SONAR_LOGIN="sqp_f33ed664b6a5cbc1e13159c2aea42bbb3247f5bd"  -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms-frontend'
+                sh 'cd webapp && sudo docker run  --rm -e SONAR_HOST_URL="http://3.110.221.47:9000" -e SONAR_LOGIN="sqp_52daae87d414924213a2476ddf1f68638dd8f395"  -v ".:/usr/src" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms-project'
             }
         }
         stage('Build LMS') {
@@ -21,7 +21,7 @@ pipeline {
                     def packageJSONVersion = packageJSON.version
                     echo "${packageJSONVersion}"
                     sh "zip webapp/dist-${packageJSONVersion}.zip -r webapp/dist"
-                    sh "curl -v -u admin:gopal --upload-file webapp/dist-${packageJSONVersion}.zip http://15.206.210.7:8081/repository/lms/"
+                    sh "curl -v -u admin:gopal --upload-file webapp/dist-${packageJSONVersion}.zip http://3.110.221.47:8081/repository/lms/"
             }
             }
         }
@@ -32,7 +32,8 @@ pipeline {
                     def packageJSON = readJSON file: 'webapp/package.json'
                     def packageJSONVersion = packageJSON.version
                     echo "${packageJSONVersion}"
-                    sh "curl -u admin:gopal -X GET \'http://15.206.210.7:8081/repository/lms/dist-${packageJSONVersion}.zip\' --output dist-'${packageJSONVersion}'.zip"
+                    sh "sudo apt install zip -y"
+                    sh "curl -u admin:gopal -X GET \'http://3.110.221.47:8081/repository/lms/dist-${packageJSONVersion}.zip\' --output dist-'${packageJSONVersion}'.zip"
                     sh "sudo apt install nginx -y"
                     sh 'sudo rm -rf /var/www/html/*'
                     sh "sudo unzip -o dist-'${packageJSONVersion}'.zip"
